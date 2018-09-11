@@ -33,6 +33,8 @@ class SpaceShip(Sprite):
             self.rotation-=0.02
         if self.lturn==1:
             self.rotation+=0.02
+        self.vx=cos(radians(self.rotation))
+        self.vy=sin(radians(self.rotation))
         self.x += self.vx
         self.y += self.vy
         # manage thrust animation
