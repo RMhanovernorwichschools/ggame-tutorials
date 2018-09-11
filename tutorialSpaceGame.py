@@ -1,4 +1,5 @@
 from ggame import App, RectangleAsset, ImageAsset, Sprite, LineStyle, Color, Frame
+from math import radians, sin, cos
 
 class SpaceShip(Sprite):
     """
@@ -30,11 +31,11 @@ class SpaceShip(Sprite):
         
     def step(self): #'self' is important here because it means step happens for each individual ship
         if self.rturn==1:
-            self.rotation-=0.02
+            self.rotation-=0.04
         if self.lturn==1:
-            self.rotation+=0.02
-        self.vx=cos(radians(self.rotation))
-        self.vy=sin(radians(self.rotation))
+            self.rotation+=0.04
+        self.vx=-2*sin(self.rotation)
+        self.vy=-2*cos(self.rotation)
         self.x += self.vx
         self.y += self.vy
         # manage thrust animation
