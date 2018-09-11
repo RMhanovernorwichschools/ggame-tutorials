@@ -19,6 +19,9 @@ class SpaceShip(Sprite):
         self.thrustframe = 1
         SpaceGame.listenKeyEvent("keydown", "space", self.thrustOn)
         SpaceGame.listenKeyEvent("keyup", "space", self.thrustOff)
+        #For question 1, let's add some turning
+        SpaceGame.listenKeyEvent("keydown", "leftarrow", self.turnleft)
+        SpaceGame.listenKeyEvent("keydown", "rightarrow", self.turnright)
         
         
     def step(self): #'self' is important here because it means step happens for each individual ship
@@ -39,6 +42,12 @@ class SpaceShip(Sprite):
     #Got it. Event is because it's called by a .listenKeyEvent
     def thrustOff(self, event):
         self.thrust = 0
+    
+    def turnleft(self, event):
+        self.vr +=0.02
+    
+    def turnright(self, event):
+        self.vr -=0.02
 
 class SpaceGame(App):
     """
