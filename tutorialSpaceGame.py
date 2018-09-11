@@ -19,14 +19,22 @@ class SpaceShip(Sprite):
         SpaceGame.listenKeyEvent("keydown", "space", self.thrustOn)
         SpaceGame.listenKeyEvent("keyup", "space", self.thrustOff)
         
-    def step(self):
+    def step(self): #'self' is important here because it means step happens for each individual ship
         self.x += self.vx
         self.y += self.vy
         self.rotation += self.vr
+        # manage thrust animation
+        if self.thrust == 1:
+            self.setImage(self.thrustframe)
+            self.thrustframe += 1
+            if self.thrustframe == 4:
+                self.thrustframe = 1
+        else:
+            self.setImage(0)
     
     def thrustOn(self, event): #unsure why 'event' is important, but 'self' exists b/c each objects has its own thrust
         self.thrust = 1
-        
+    #Got it. Event is because it's called by a .listenKeyEvent
     def thrustOff(self, event):
         self.thrust = 0
 
