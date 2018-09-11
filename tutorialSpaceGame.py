@@ -13,11 +13,13 @@ class SpaceShip(Sprite):
         self.vx = 1
         self.vy = 1
         self.vr = 0.01
+        self.fxcenter = self.fycenter = 0.5 #important for natural-looking top-down turning
         #Now this is for the animations, changing the frames in response to a button prompt (space)
         self.thrust = 0
         self.thrustframe = 1
         SpaceGame.listenKeyEvent("keydown", "space", self.thrustOn)
         SpaceGame.listenKeyEvent("keyup", "space", self.thrustOff)
+        
         
     def step(self): #'self' is important here because it means step happens for each individual ship
         self.x += self.vx
@@ -25,9 +27,9 @@ class SpaceShip(Sprite):
         self.rotation += self.vr
         # manage thrust animation
         if self.thrust == 1:
-            self.setImage(self.thrustframe)
+            self.setImage(self.thrustframe) #self.thrustframe is just a variable (thrustframe) set below
             self.thrustframe += 1
-            if self.thrustframe == 4:
+            if self.thrustframe == 4:       #'self' is involved in this variable so its just applied to one ship
                 self.thrustframe = 1
         else:
             self.setImage(0)
