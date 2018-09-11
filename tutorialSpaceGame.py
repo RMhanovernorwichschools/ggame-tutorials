@@ -1,6 +1,20 @@
 from ggame import App, RectangleAsset, ImageAsset, Sprite, LineStyle, Color, Frame
 from math import radians, sin, cos
 
+blasts=0
+
+class Blast(Sprite):
+    asset=ImageAsset("images/blast.png")
+    def __init__(self, scale, xcoor, ycoor, rot):
+        super().__init__(Blast.asset)
+        self.x=xcoor
+        self.y=ycoor
+        self.rotation=rot
+        self.scale=scale
+    
+    def step(self):
+        self.x+=1
+
 class SpaceShip(Sprite):
     """
     Animated space ship
@@ -22,6 +36,7 @@ class SpaceShip(Sprite):
         #Now this is for the animations, changing the frames in response to a button prompt (space)
         self.thrust = 0
         self.thrustframe = 1
+        self.blastexist=0
         SpaceGame.listenKeyEvent("keydown", "w", self.thrustOn)
         SpaceGame.listenKeyEvent("keyup", "w", self.thrustOff)
         SpaceGame.listenKeyEvent("keydown", "s", self.backupOn)
@@ -31,6 +46,7 @@ class SpaceShip(Sprite):
         SpaceGame.listenKeyEvent("keydown", "d", self.turnright)
         SpaceGame.listenKeyEvent("keyup", "a", self.noturnleft)
         SpaceGame.listenKeyEvent("keyup", "d", self.noturnright)
+        SpaceGame.listenKeyEvent('keydown', 'enter', self.createblast)
         
         
     def step(self): #'self' is important here because it means step happens for each individual ship
@@ -54,6 +70,16 @@ class SpaceShip(Sprite):
         else:
             self.setImage(0)
             self.velo=(self.velo*19)/20
+        if self.blastexist==1:
+            BOOM=Blast(5,self.x, self.y, (self.rotation-radians(270)))
+            blasts+=1
+            self.blastexist=0
+        for x in range(blasts):
+            print(x)
+            blast.step(BOOM)
+
+    def createblast(self, event):
+        self.blastexist=1
     
     def thrustOn(self, event): #unsure why 'event' is important, but 'self' exists b/c each objects has its own thrust
         self.thrust = 1
@@ -89,7 +115,7 @@ class SpaceGame(App):
         noline = LineStyle(0, black)
         bg_asset = RectangleAsset(self.width, self.height, noline, black)
         bg = Sprite(bg_asset, (0,0))
-        SpaceShip((100,100))
+        SP1=SpaceShip((100,100))
         SpaceShip((150,150))
         SpaceShip((200,50))
     
