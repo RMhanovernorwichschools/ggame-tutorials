@@ -12,7 +12,9 @@ class SpaceShip(Sprite):
         #above is object generation. This is now for the steps, which generate updated images
         self.vx = 1
         self.vy = 1
-        self.vr = 0.01
+        self.vr = 0.0
+        self.lturn=0
+        self.rturn=0
         self.fxcenter = self.fycenter = 0.5 #important for natural-looking top-down turning
         #Now this is for the animations, changing the frames in response to a button prompt (space)
         self.thrust = 0
@@ -20,14 +22,19 @@ class SpaceShip(Sprite):
         SpaceGame.listenKeyEvent("keydown", "space", self.thrustOn)
         SpaceGame.listenKeyEvent("keyup", "space", self.thrustOff)
         #For question 1, let's add some turning
-        SpaceGame.listenKeyEvent("keydown", "leftarrow", self.turnleft)
-        SpaceGame.listenKeyEvent("keydown", "rightarrow", self.turnright)
+        SpaceGame.listenKeyEvent("keydown", "comma", self.turnleft)
+        SpaceGame.listenKeyEvent("keydown", "period", self.turnright)
+        SpaceGame.listenKeyEvent("keyup", "comma", self.noturnleft)
+        SpaceGame.listenKeyEvent("keyup", "period", self.noturnright)
         
         
     def step(self): #'self' is important here because it means step happens for each individual ship
+        if self.rturn==1:
+            self.rotation-=0.02
+        if self.lturn==1:
+            self.rotation+=0.02
         self.x += self.vx
         self.y += self.vy
-        self.rotation += self.vr
         # manage thrust animation
         if self.thrust == 1:
             self.setImage(self.thrustframe) #self.thrustframe is just a variable (thrustframe) set below
@@ -44,10 +51,16 @@ class SpaceShip(Sprite):
         self.thrust = 0
     
     def turnleft(self, event):
-        self.vr +=0.02
+        self.lturn =1
     
     def turnright(self, event):
-        self.vr -=0.02
+        self.rturn =1
+    
+    def noturnleft(self, event):
+        self.lturn =0
+        
+    def noturnright(self, event):
+        self.rturn =0
 
 class SpaceGame(App):
     """
