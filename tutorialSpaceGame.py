@@ -16,17 +16,21 @@ class SpaceShip(Sprite):
         self.vr = 0.0
         self.lturn=0
         self.rturn=0
+        self.velo=0
+        self.back=0
         self.fxcenter = self.fycenter = 0.5 #important for natural-looking top-down turning
         #Now this is for the animations, changing the frames in response to a button prompt (space)
         self.thrust = 0
         self.thrustframe = 1
-        SpaceGame.listenKeyEvent("keydown", "space", self.thrustOn)
-        SpaceGame.listenKeyEvent("keyup", "space", self.thrustOff)
+        SpaceGame.listenKeyEvent("keydown", "w", self.thrustOn)
+        SpaceGame.listenKeyEvent("keyup", "w", self.thrustOff)
+        SpaceGame.listenKeyEvent("keydown", "s", self.backupOn)
+        SpaceGame.listenKeyEvent("keyup", "s", self.backupOff)
         #For question 1, let's add some turning
-        SpaceGame.listenKeyEvent("keydown", "comma", self.turnleft)
-        SpaceGame.listenKeyEvent("keydown", "period", self.turnright)
-        SpaceGame.listenKeyEvent("keyup", "comma", self.noturnleft)
-        SpaceGame.listenKeyEvent("keyup", "period", self.noturnright)
+        SpaceGame.listenKeyEvent("keydown", "a", self.turnleft)
+        SpaceGame.listenKeyEvent("keydown", "d", self.turnright)
+        SpaceGame.listenKeyEvent("keyup", "a", self.noturnleft)
+        SpaceGame.listenKeyEvent("keyup", "d", self.noturnright)
         
         
     def step(self): #'self' is important here because it means step happens for each individual ship
@@ -34,18 +38,22 @@ class SpaceShip(Sprite):
             self.rotation-=0.04
         if self.lturn==1:
             self.rotation+=0.04
-        self.vx=-2*sin(self.rotation)
-        self.vy=-2*cos(self.rotation)
+        self.vx=-self.velo*sin(self.rotation)
+        self.vy=-self.velo*cos(self.rotation)
         self.x += self.vx
         self.y += self.vy
+        if self.back==1:
+            self.velo-=0.04
         # manage thrust animation
         if self.thrust == 1:
+            self.velo+=0.06
             self.setImage(self.thrustframe) #self.thrustframe is just a variable (thrustframe) set below
             self.thrustframe += 1
             if self.thrustframe == 4:       #'self' is involved in this variable so its just applied to one ship
                 self.thrustframe = 1
         else:
             self.setImage(0)
+            self.velo=(self.velo*19)/20
     
     def thrustOn(self, event): #unsure why 'event' is important, but 'self' exists b/c each objects has its own thrust
         self.thrust = 1
@@ -64,6 +72,11 @@ class SpaceShip(Sprite):
         
     def noturnright(self, event):
         self.rturn =0
+    
+    def backupOn(self, event):
+        self.back=1
+    def backupOff(self, event):
+        self.back=0
 
 class SpaceGame(App):
     """
