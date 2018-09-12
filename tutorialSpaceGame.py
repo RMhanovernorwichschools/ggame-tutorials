@@ -12,8 +12,9 @@ class Blast(Sprite):
         self.rotation=rot
         self.scale=scale
     
-    def step(self):
+    def move(self):
         self.x+=1
+        blasts-=1
 
 class SpaceShip(Sprite):
     """
@@ -76,7 +77,7 @@ class SpaceShip(Sprite):
             self.blastexist=0
         for x in range(blasts):
             print(x)
-            blast.step(BOOM)
+            x.move(BOOM)
 
     def createblast(self, event):
         self.blastexist=1
